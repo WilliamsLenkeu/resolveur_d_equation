@@ -50,8 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Mettez ici votre logique pour résoudre l'équation de 3ème degré
-                // en utilisant les valeurs entrées dans les TextFields
+                //fonction pour resoudre les equations
               },
               child: Text('Résoudre'),
             ),
