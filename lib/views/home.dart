@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/equation_solver.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,50 +14,95 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _cController = TextEditingController();
   TextEditingController _dController = TextEditingController();
 
+  String _result = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Résolution d\'une équation de 3ème degré'),
+        title: Text('Résolution d\'équation de 3ème degré'),
+        backgroundColor: Colors.grey[850],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextFormField(
-              controller: _aController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Coefficient a'),
-            ),
-            SizedBox(height: 10.0),
-            TextFormField(
-              controller: _bController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Coefficient b'),
-            ),
-            SizedBox(height: 10.0),
-            TextFormField(
-              controller: _cController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Coefficient c'),
-            ),
-            SizedBox(height: 10.0),
-            TextFormField(
-              controller: _dController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Coefficient d'),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                //fonction pour resoudre les equations
-              },
-              child: Text('Résoudre'),
-            ),
-          ],
+      backgroundColor: Colors.grey[900],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTextField(_aController, 'Coefficient a', Colors.grey),
+              SizedBox(height: 10.0),
+              _buildTextField(_bController, 'Coefficient b', Colors.grey),
+              SizedBox(height: 10.0),
+              _buildTextField(_cController, 'Coefficient c', Colors.grey),
+              SizedBox(height: 10.0),
+              _buildTextField(_dController, 'Coefficient d', Colors.grey),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  try {
+                    double a = double.parse(_aController.text);
+                    if (a == 0) {
+                      throw FormatException();
+                    }
+                    double b = double.parse(_bController.text);
+                    double c = double.parse(_cController.text);
+                    double d = double.parse(_dController.text);
+                    List<num> solutions = solveCubicEquation(a, b, c, d);
+                    setState(() {
+                      _result = solutions.join(', ');
+                    });
+                  } catch (e) {
+                    setState(() {
+                      _result = 'Erreur : Veuillez entrer des nombres valides et a ne doit pas être zéro.';
+                    });
+                  }
+                },
+                child: Text('Résoudre'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: Colors.grey[700],
+                ),
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  _aController.clear();
+                  _bController.clear();
+                  _cController.clear();
+                  _dController.clear();
+                  setState(() {
+                    _result = '';
+                  });
+                },
+                child: Text('Tout effacer'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: Colors.grey[700],
+                ),
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                'Résultat : $_result',
+                style: const TextStyle(fontSize: 20.0, color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, Color color) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: color),
+        border: OutlineInputBorder(),
+        filled: true,
+        fillColor: Colors.grey[800],
+      ),
+      style: TextStyle(color: Colors.white),
     );
   }
 }
