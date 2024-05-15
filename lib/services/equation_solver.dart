@@ -9,21 +9,24 @@ List<num> solveCubicEquation(num a, num b, num c, num d) {
   num g = ((2 * (b * b * b) / (a * a * a)) - (9 * b * c / (a * a)) + (27 * d / a)) / 27;
   num h = ((g * g) / 4) + ((f * f * f) / 27);
 
-  if (h > 0) {
-    // Ici on aura une solution réelle et deux solutions complexes
+  // Calcul du discriminant pour déterminer le nombre et le type de solutions
+  num discriminant = (f * f * f) / 27 + (g * g) / 4;
+
+  if (discriminant > 0) {
+    // Une solution réelle et deux solutions complexes
     num r = -(g / 2) + math.sqrt(h);
     num s = (r < 0) ? -cbrt(-r) : cbrt(r);
     num t = -(g / 2) - math.sqrt(h);
     num u = (t < 0) ? -cbrt(-t) : cbrt(t);
     num x1 = (s + u) - (b / (3 * a));
     return [x1.toDouble()];
-  } else if (f == 0 && g == 0 && h == 0) {
-    // Ici on c'est dans le cas de trois solutions réelles identiques
-    num x = cbrt(d / (1.0 * a));
+  } else if (discriminant == 0) {
+    // Trois solutions réelles identiques
+    num x = -cbrt(g / 2) - (b / (3 * a));
     return [x.toDouble(), x.toDouble(), x.toDouble()];
   } else {
-    // Ici on aura c'est dans le cas de trois solutions réelles différentes
-    num i = math.sqrt(((g * g) / 4) - h);
+    // Trois solutions réelles différentes
+    num i = math.sqrt((g * g) / 4 - h);
     num j = cbrt(i);
     num k = math.acos(-(g / (2 * i)));
     num l = -j;
