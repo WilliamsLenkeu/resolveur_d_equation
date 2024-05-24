@@ -9,7 +9,7 @@ List<num> solveCubicEquation(num a, num b, num c, num d) {
   num g = ((2 * (b * b * b) / (a * a * a)) - (9 * b * c / (a * a)) + (27 * d / a)) / 27;
   num h = ((g * g) / 4) + ((f * f * f) / 27);
 
-  // Calcul du discriminant pour déterminer le nombre et le type de solutions
+  // Ici j'affecte la valeur du calcul du discriminant pour déterminer le nombre et le type de solutions
   num discriminant = h;
 
   if (discriminant > 0) {
