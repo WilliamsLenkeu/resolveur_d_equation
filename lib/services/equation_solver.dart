@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 num cbrt(num x) {
-  return math.pow(x, 1/3);
+  return x < 0 ? -math.pow(-x, 1/3) : math.pow(x, 1/3);
 }
 
 List<num> solveCubicEquation(num a, num b, num c, num d) {
@@ -10,20 +10,22 @@ List<num> solveCubicEquation(num a, num b, num c, num d) {
   num h = ((g * g) / 4) + ((f * f * f) / 27);
 
   // Calcul du discriminant pour déterminer le nombre et le type de solutions
-  num discriminant = (f * f * f) / 27 + (g * g) / 4;
+  num discriminant = h;
 
   if (discriminant > 0) {
     // Une solution réelle et deux solutions complexes
     num r = -(g / 2) + math.sqrt(h);
-    num s = (r < 0) ? -cbrt(-r) : cbrt(r);
+    num s = cbrt(r);
     num t = -(g / 2) - math.sqrt(h);
-    num u = (t < 0) ? -cbrt(-t) : cbrt(t);
+    num u = cbrt(t);
     num x1 = (s + u) - (b / (3 * a));
     return [x1.toDouble()];
   } else if (discriminant == 0) {
-    // Trois solutions réelles identiques
-    num x = -cbrt(g / 2) - (b / (3 * a));
-    return [x.toDouble(), x.toDouble(), x.toDouble()];
+    // Trois solutions réelles identiques ou deux réelles (one being double)
+    num u1 = cbrt(d / a);
+    num x1 = -2 * u1 - (b / (3 * a));
+    num x2 = u1 - (b / (3 * a));
+    return [x1.toDouble(), x2.toDouble(), x2.toDouble()];
   } else {
     // Trois solutions réelles différentes
     num i = math.sqrt((g * g) / 4 - h);

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import '../services/equation_solver.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -14,6 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _bController = TextEditingController();
   final TextEditingController _cController = TextEditingController();
   final TextEditingController _dController = TextEditingController();
+
   List<num>? _solutions;
 
   @override
@@ -44,9 +45,17 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildButton(Icons.calculate, 'Résoudre', _solveEquation),
+                _buildButton(
+                  const Icon(Icons.calculate, color: Colors.white),
+                  const Text('Résoudre'),
+                  _solveEquation,
+                ),
                 const SizedBox(width: 10.0),
-                _buildButton(Icons.restart_alt, 'Tout effacer', _clearAllFields),
+                _buildButton(
+                  const Icon(Icons.restart_alt, color: Colors.white),
+                  const Text('Tout effacer'),
+                  _clearAllFields,
+                ),
               ],
             ),
             const SizedBox(height: 20.0),
@@ -72,11 +81,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildButton(IconData icon, String label, void Function()? onPressed) {
+  Widget _buildButton(Icon icon, Text label, void Function()? onPressed) {
     return Expanded(
       child: ElevatedButton.icon(
-        icon: Icon(icon, color: Colors.white),
-        label: Text(label),
+        icon: icon,
+        label: label,
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
@@ -89,7 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void _solveEquation() {
     try {
       final a = double.parse(_aController.text);
-      if (a == 0) throw const FormatException();
+      if (a == 0) {
+        throw const FormatException();
+      }
       final b = double.parse(_bController.text);
       final c = double.parse(_cController.text);
       final d = double.parse(_dController.text);
